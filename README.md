@@ -1,6 +1,8 @@
-# biocrystal
+# BioCrystal
 
-TODO: Write a description here
+This is a package to handle biological sequences, namely nucleotide and amino acid, for bioinformatic analysis.
+
+[![Build Status](https://travis-ci.org/rguiscard/biocrystal.svg?branch=master)](https://travis-ci.org/rguiscard/biocrystal)
 
 ## Installation
 
@@ -9,7 +11,7 @@ TODO: Write a description here
    ```yaml
    dependencies:
      biocrystal:
-       github: your-github-user/biocrystal
+       github: rguiscard/biocrystal
    ```
 
 2. Run `shards install`
@@ -28,7 +30,7 @@ TODO: Write development instructions here
 
 ## Contributing
 
-1. Fork it (<https://github.com/your-github-user/biocrystal/fork>)
+1. Fork it (<https://github.com/rguiscard/biocrystal/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
