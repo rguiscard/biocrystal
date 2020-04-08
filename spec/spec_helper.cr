@@ -1,2 +1,2 @@
 require "spec"
-require "../src/biocrystal"
+require "../src/bio"
