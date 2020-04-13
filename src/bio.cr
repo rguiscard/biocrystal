@@ -1,3 +1,5 @@
+require "./seq"
+
 # TODO: Write documentation for `Biocrystal`
 module Bio
   VERSION = "0.1.0"
