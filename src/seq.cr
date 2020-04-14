@@ -9,8 +9,37 @@ module Bio
     def initialize(@sequence)
     end
 
-    def valid?
-      sequence.chars.all?{|char| @symbol.alphabets.includes?(char.downcase)}
+    # Check sequence is valid as all letters are in alphabets
+    # Those special alphabet can be kept: :gap, :space, :newline
+    def valid?(ignore = [] of Symbol)
+      sequence.chars.all?{ |char|
+        if (char == '-') && ignore.includes?(:gap)
+          return true
+        elsif (char == ' ') && ignore.includes?(:space)
+          return true    
+        elsif ((char == '\n') || (char == '\r')) && ignore.includes?(:newline)
+           return true    
+        else
+          @symbol.alphabets.includes?(char.downcase)
+        end
+      }
+    end
+
+    # Remove spaces, newline and gap
+    # Those special alphabet can be kept: :gap, :space, :newline
+    def compact!(keep = [] of Symbol)
+
+      if keep.includes?(:gap) == false
+        @sequence = @sequence.gsub('-', "")
+      end
+
+      if keep.includes?(:space) == false
+        @sequence = @sequence.gsub(' ', "")
+      end
+
+      if keep.includes?(:newline) == false
+        @sequence = @sequence.gsub(/[\n\r]+/, "")
+      end
     end
   end
 
