@@ -4,9 +4,11 @@ require "./symbol"
 module Bio
   class Seq
     property sequence : String
+    property identifier : String
     property symbol = Bio::Symbol
 
-    def initialize(@sequence)
+    def initialize(@sequence, identifier = "")
+      @identifier = identifier
     end
 
     # Check sequence is valid as all letters are in alphabets
