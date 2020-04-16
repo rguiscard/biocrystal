@@ -1,5 +1,6 @@
 name: biocrystal
 version: 0.1.0
+description: library to manipulate biological sequences (DNA, RNA and protein)
 
 authors:
   - Robert Guiscard <robert.guiscard@outlook.com>

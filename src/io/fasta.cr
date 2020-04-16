@@ -33,5 +33,15 @@ module Bio::IO
     def gets_aa
       gets_amino_acid
     end
+
+    # Convert Bio::Seq to fasta format in String
+    def self.to_fasta(seqs : Bio::Seq | Array(Bio::Seq))
+      if seqs.is_a?(Bio::Seq)
+        seqs = [seqs]
+      end
+      seqs.map { |seq|
+        "> #{seq.identifier}\n#{seq.sequence}"
+      }.join(separator = "\n")
+    end
   end
 end

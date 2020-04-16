@@ -1,5 +1,6 @@
 require "./seq"
 require "./io"
+require "./cmd"
 
 # TODO: Write documentation for `Biocrystal`
 module Bio
