@@ -11,6 +11,10 @@ module Bio
       @identifier = identifier
     end
 
+    def clone
+      self.class.new(@sequence, identifier=@identifier.dup)
+    end
+
     # Check sequence is valid as all letters are in alphabets
     # Those special alphabet can be kept: :gap, :space, :newline
     def valid?(ignore = [] of Symbol)
@@ -30,7 +34,6 @@ module Bio
     # Remove spaces, newline and gap
     # Those special alphabet can be kept: :gap, :space, :newline
     def compact!(keep = [] of Symbol)
-
       if keep.includes?(:gap) == false
         @sequence = @sequence.gsub('-', "")
       end
@@ -42,6 +45,7 @@ module Bio
       if keep.includes?(:newline) == false
         @sequence = @sequence.gsub(/[\n\r]+/, "")
       end
+      self
     end
   end
 
@@ -49,7 +53,67 @@ module Bio
     property symbol = Bio::AminoAcid
   end
 
-  class NucleotideSeq < Seq
+  abstract class NucleotideSeq < Seq
+
+    # Overlap extend with seq.
+    # Also check reverse_complement by default
+    def overlap_extend(seq : Bio::NucleotideSeq, reverse_complement = true)
+      extension = seq.compact!
+      forward_overlap = self.sequence.intersect(extension.sequence)
+      reverse_overlap = ""
+      overlap = forward_overlap
+
+      if reverse_complement
+        reverse_overlap = self.sequence.intersect(extension.reverse_complement.sequence)
+      end
+
+      if forward_overlap.size < reverse_overlap.size
+        extension = extension.reverse_complement
+        overlap = reverse_overlap
+      end
+
+      return self if overlap.blank?
+
+      partitions = self.sequence.partition(overlap)
+      clone = self.clone
+      if extension.sequence.downcase.starts_with?(overlap.downcase)
+        clone.sequence = partitions[0]+" "+extension.sequence
+      elsif extension.sequence.downcase.ends_with?(overlap.downcase)
+        clone.sequence = extension.sequence+" "+partitions[2]
+      else
+        # Overlap is in the middle of extension. Unable to extend.
+      end
+      clone.compact!
+    end
+
+    def reverse!
+      @sequence = @sequence.reverse
+      self
+    end
+
+    def reverse
+      clone = self.clone
+      clone.reverse!
+    end
+
+    def forward_complement!
+      @sequence = @sequence.tr("ATGCatgc", "TACGtacg")
+      self
+    end
+
+    def forward_complement
+      clone = self.clone
+      clone.forward_complement!
+    end
+
+    def reverse_complement!
+      self.reverse!.forward_complement!
+    end
+
+    def reverse_complement
+      clone = self.clone
+      clone.reverse!.forward_complement!
+    end
   end
 
   class DNASeq < NucleotideSeq

@@ -3,6 +3,41 @@ require "./spec_helper"
 module Bio
   describe Seq do
 
+    it "can extend overlap string in the front" do
+      seq = Bio::DNASeq.new(sequence: "ATGCAAAAACGGGCGATTTATCCGGGTACTTTCGATCCCATTACCAATGGTCATAT")
+      forward = Bio::DNASeq.new(sequence: "CATG CCATGGAAAAACGGGCGATTTATCC")
+      seq.overlap_extend(forward).sequence.should eq "CATGCCATGGAAAAACGGGCGATTTATCCGGGTACTTTCGATCCCATTACCAATGGTCATAT"
+    end
+
+    it "can extend overlap string in the back" do
+      seq = Bio::DNASeq.new(sequence: "GGTGAAAGAGGTGGCGCGCCATCAGGGCGATGTCACCCATTTCCTGCCGGAGAATGTCCATCAGGCGCTGATGGCGAAGTTAGCG")
+      backward = Bio::DNASeq.new(sequence: "CG GGATCCCTA CGCTAACTTCGCCATCAGC")
+      seq.overlap_extend(backward).sequence.should eq "GGTGAAAGAGGTGGCGCGCCATCAGGGCGATGTCACCCATTTCCTGCCGGAGAATGTCCATCAGGCGCTGATGGCGAAGTTAGCGTAGGGATCCCG"
+    end 
+
+    it "can reverse DNA sequence" do
+      seq = Bio::DNASeq.new(sequence: "CGGTAGCGTAGCGTAGCGAGCTGAGCGTGAGCGAG")
+      seq.reverse!
+      seq.sequence.should eq "GAGCGAGTGCGAGTCGAGCGATGCGATGCGATGGC"
+    end
+
+    it "can get reverse DNA sequence" do
+      seq = Bio::DNASeq.new(sequence: "CGGTAGCGTAGCGTAGCGAGCTGAGCGTGAGCGAG")
+      seq.reverse.sequence.should eq "GAGCGAGTGCGAGTCGAGCGATGCGATGCGATGGC"
+    end
+
+    it "can forward complement DNA sequence" do
+      seq = Bio::DNASeq.new(sequence: "CGGTAGCGTAGCGTAGCGAGCTGAGCGTGAGCGAG")
+      seq.forward_complement!
+      seq.sequence.should eq "GCCATCGCATCGCATCGCTCGACTCGCACTCGCTC"
+    end
+
+    it "can reverse complement DNA sequence" do
+      seq = Bio::DNASeq.new(sequence: "CGGTAGCGTAGCGTAGCGAGCTGAGCGTGAGCGAG")
+      seq.reverse_complement!
+      seq.sequence.should eq "CTCGCTCACGCTCAGCTCGCTACGCTACGCTACCG"
+    end
+
     it "initiates Seq with sequence" do
       seq = Bio::Seq.new(sequence: "ATGC")
       seq.sequence.should eq "ATGC"

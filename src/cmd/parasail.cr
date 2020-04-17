@@ -7,6 +7,8 @@ module Bio::CMD
       property input_query : String | Bio::Seq = "" # this is the query
       property output_format : String = "EMBOSS"
 
+      # Align two sequences.
+      # input_file and input_query can be either path to fasta file or Bio::Seq instance
       def run
         temp_file = nil
         if input_file.is_a?(Bio::Seq)
@@ -43,11 +45,15 @@ module Bio::CMD
         end
       end 
 
+      # Align two sequences
+      # input_query is path to fasta file
       def run (input_query : String)
         @input_query = input_query
         run
       end
 
+      # Align two sequences
+      # input_query is a Bio::Seq instance
       def run (seq : Bio::Seq)
         @input_query = seq
         run

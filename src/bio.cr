@@ -1,3 +1,4 @@
+require "./utils"
 require "./seq"
 require "./io"
 require "./cmd"
