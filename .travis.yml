@@ -1,5 +1,11 @@
 language: crystal
 
+before_script:
+  - wget https://github.com/jeffdaily/parasail/releases/download/v2.4.2/parasail-2.4.2-manylinux1_x86_64.tar.gz -O /tmp/parasail.tar.gz
+  - tar -xvf /tmp/parasail.tar.gz
+  - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/parasail-2.4.2-manylinux1_x86_64/lib/
+  - export PATH=$PATH:$PWD/parasail-2.4.2-manylinux1_x86_64/bin/
+
 # Uncomment the following if you'd like Travis to run specs and check code formatting
 # script:
 #   - crystal spec
