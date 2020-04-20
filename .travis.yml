@@ -6,6 +6,11 @@ before_script:
   - export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/parasail-2.4.2-manylinux1_x86_64/lib/
   - export PATH=$PATH:$PWD/parasail-2.4.2-manylinux1_x86_64/bin/
 
+addons:
+  apt:
+    packages:
+    - muscle
+
 # Uncomment the following if you'd like Travis to run specs and check code formatting
 # script:
 #   - crystal spec

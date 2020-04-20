@@ -27,3 +27,28 @@ puts results[1] #=> alignment results
   ||:||:.|.|.| |.....||...: .|.||  .|..|||||||::|||.
 1 MFIFLLFLTLTSGSDLDRCTTFDDVQAPNYTQHTSSMRGVYYPDEIFRSD      50
 ````
+
+### [Muscle](https://www.drive5.com/muscle/)
+
+Muscle is for multiple sequence alignment. It can be installed via package like this
+
+````
+sudo apt-get install muscle
+````
+
+Run it like this:
+
+````
+seqs = [] of String
+[Path.new("P0DTC2.fasta"), Path.new("P59594.fasta")].map do |path|
+  Bio::IO::Fasta.open(path.to_s) do |f|
+    seqs << f.gets_aa[0]
+  end
+end
+  
+muscle = Bio::CMD::Muscle.new
+muscle.input = seqs
+muscle.output_format = "-clw"
+results = muscle.run
+puts results[1]
+````
