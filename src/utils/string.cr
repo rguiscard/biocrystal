@@ -1,4 +1,5 @@
 class String
+  # Find the longest common string
   def intersect(str : String)
     return "" if [self, str].any?(&.empty?)
 

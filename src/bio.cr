@@ -1,5 +1,6 @@
 require "./utils"
 require "./seq"
+require "./codon"
 require "./io"
 require "./cmd"
 

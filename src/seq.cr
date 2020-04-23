@@ -1,4 +1,5 @@
 require "./symbol"
+require "./translation"
 
 # Nucleotide and amino acid sequence mainly in string.
 module Bio
@@ -54,6 +55,12 @@ module Bio
   end
 
   abstract class NucleotideSeq < Seq
+    # return an instance of Translation containing original nucleotide sequence and translated protein sequence
+    def translate(frameshift = 0, reverse = false)
+      translation = Bio::Translation.new(seq: self)
+      translation.translate!(frameshift, reverse)
+      translation
+    end
 
     # Overlap extend with seq.
     # Also check reverse_complement by default
@@ -97,7 +104,7 @@ module Bio
     end
 
     def forward_complement!
-      @sequence = @sequence.tr("ATGCatgc", "TACGtacg")
+      @sequence = @sequence.tr("ATUGCatugc", "TAACGtaacg")
       self
     end
 
