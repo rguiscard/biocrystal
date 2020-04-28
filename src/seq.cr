@@ -56,9 +56,9 @@ module Bio
 
   abstract class NucleotideSeq < Seq
     # return an instance of Translation containing original nucleotide sequence and translated protein sequence
-    def translate(frameshift = 0, reverse = false)
+    def translate(frameshift = 0, direction = Bio::TranslationDirection::Forward)
       translation = Bio::Translation.new(seq: self)
-      translation.translate!(frameshift, reverse)
+      translation.translate!(frameshift, direction)
       translation
     end
 

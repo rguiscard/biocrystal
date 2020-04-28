@@ -18,14 +18,14 @@ module Bio
 
     it "reverse translate from Bio::DNASeq to protein" do
       seq = Bio::DNASeq.new("atggcttgttggcctcagctgaggttgctgctgtggaagaacTGA")
-      tr = seq.translate(reverse: true)
+      tr = seq.translate(direction: Bio::TranslationDirection::Reverse)
       tr.nucleotide_seq.should eq "atggcttgttggcctcagctgaggttgctgctgtggaagaacTGA"
       tr.amino_acid_seq.should eq "SVLPQQQPQLRPTSH".downcase
     end
 
     it "reverse translate with frameshift" do
       seq = Bio::DNASeq.new("atggcttgttggcctcagctgaggttgctgctgtggaagaacTGA")
-      tr = seq.translate(frameshift: 3, reverse: true)
+      tr = seq.translate(frameshift: 3, direction: Bio::TranslationDirection::Reverse)
       tr.nucleotide_seq.should eq "atggcttgttggcctcagctgaggttgctgctgtggaagaacTGA"
       tr.amino_acid_seq.should eq "VLPQQQPQLRPTSH".downcase
     end
