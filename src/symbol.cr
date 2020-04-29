@@ -11,7 +11,6 @@ module Bio
       end
     end
 
-    # return nucleotide or amino acid in array of downcase letter (Char)
     def self.alphabets
       [] of Char
     end
@@ -26,8 +25,9 @@ module Bio
       'g' => :"DNA_G"
     }
 
+    # return nucleotide or amino acid in array of downcase letter (Char)
     def self.alphabets
-      ['a', 't', 'g', 'c']
+      @@symbols.keys
     end
   end
 
@@ -39,8 +39,10 @@ module Bio
       'c' => :"RNA_C",
       'g' => :"RNA_G"
     }
+
+    # return nucleotide or amino acid in array of downcase letter (Char)
     def self.alphabets
-      ['a', 'u', 'g', 'c']
+      @@symbols.keys
     end
   end
 
@@ -60,6 +62,7 @@ module Bio
       'l' => :"AA_L",
       'k' => :"AA_K",
       'm' => :"AA_M",
+      'f' => :"AA_F",
       'p' => :"AA_P",
       's' => :"AA_S",
       't' => :"AA_T",
@@ -68,8 +71,9 @@ module Bio
       'v' => :"AA_V"
     }
 
+    # return nucleotide or amino acid in array of downcase letter (Char)
     def self.alphabets
-      ['a', 'r', 'n', 'd', 'c', 'q', 'e', 'g', 'h', 'i', 'l', 'k', 'm', 'f', 'p', 's', 't', 'w', 'y', 'v']
+      @@symbols.keys
     end
   end
 end

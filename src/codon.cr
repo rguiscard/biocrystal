@@ -10,6 +10,9 @@ module Bio
       else
         s = seq
       end
+      # be sure it is multiple of 3
+      n = s.size // 3
+      s = s[0...n*3]
       s.as(String).gsub(/.{3}/) { |x|
         @@codons[x.downcase]
       }

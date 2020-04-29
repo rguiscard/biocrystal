@@ -29,5 +29,49 @@ module Bio
       tr.nucleotide_seq.should eq "atggcttgttggcctcagctgaggttgctgctgtggaagaacTGA"
       tr.amino_acid_seq.should eq "VLPQQQPQLRPTSH".downcase
     end
+
+    it "display all possible translation" do
+      seq = Bio::DNASeq.new("atggcttgttggcctcagctgaggttgctgctgtggaagaacTGA")
+      tr = Bio::Translation.new(seq)
+      tr.translations.first.should eq({0, "Forward", "MACWPQLRLLLWKN*"})
+    end
+
+    it "finds longest translation" do
+      seq = Bio::DNASeq.new("atggcttgttggcctcagctgaggttgctgctgtggaagaacTGA")
+      tr = Bio::Translation.new(seq)
+      tr.longest_open_reading_frame.should eq({0, "Reverse", "SVLPQQQPQLRPTSH", 0...15})
+    end
+    
+    it "finds and set open reading frame" do
+      seq = Bio::DNASeq.new("atggcttgttggcctcagctgaggttgctgctgtggaagaacTGA")
+      tr = Bio::Translation.new(seq)
+      tr.longest_open_reading_frame!
+      tr.frameshift.should eq 0
+      tr.direction.should eq Bio::TranslationDirection::Reverse
+      tr.aa_seq.should eq "SVLPQQQPQLRPTSH"
+    end
+
+    it "translate with frameshift and set range" do
+      seq = Bio::DNASeq.new("atggcttgtt")
+      tr = seq.translate
+      tr.amino_acid_seq.should eq "MAC".downcase
+      tr.range.should eq 0...9
+    end
+
+    
+    it "translate with frameshift and set range" do
+      seq = Bio::DNASeq.new("atggcttgtt")
+      tr = seq.translate(frameshift: 1, direction: Bio::TranslationDirection::Reverse)
+      tr.amino_acid_seq.should eq "TSH".downcase
+      tr.range.should eq 1...10
+    end
+
+    it "open reading frame with frameshift and set range" do
+      seq = Bio::DNASeq.new("atggcttgttggcctcagctgaggttgctgctgtggaagaacTGA")
+      tr = Bio::Translation.new(seq)
+      tr.longest_open_reading_frame!
+      tr.aa_seq.should eq "SVLPQQQPQLRPTSH"
+      tr.range.should eq 0...15
+    end
   end
 end
