@@ -22,6 +22,32 @@ module Bio
     def initialize(@seq)
     end
 
+    # use amino acid fragment to find corresponding nucleotide.
+    # It always return sense (coding) strand. It would be reversed if translation is on reverse strand
+    def coding_nucleotides_of(fragment : String)
+      return "" if @amino_acid_seq.blank?
+      n = (@direction.forward? ? @seq.sequence : @seq.reverse_complement.sequence)
+      i = @amino_acid_seq.index(fragment)
+      if i.nil? == false
+        b = i.as(Int32)*3+@range.begin
+        r = b...(b+fragment.size*3)
+        n[r]
+      else
+        ""
+      end
+    end
+
+    def coding_nucleotides_of(fragment : Range)
+      return "" if @amino_acid_seq.blank?
+      s = @amino_acid_seq[fragment]
+      coding_nucleotides_of(s)
+    end
+
+    def coding_nucleotides
+      return "" if @amino_acid_seq.blank?
+      coding_nucleotides_of(@amino_acid_seq)
+    end
+
     def longest_open_reading_frame!(frameshifts = [0,1,2], direction = Bio::TranslationDirection::Both)
       tr = longest_open_reading_frame(frameshifts, direction)
       @frameshift = tr[0]
@@ -45,7 +71,7 @@ module Bio
         s = ""
         tr[2].scan(regex) do |match|
           if match[0]? && (match.end.as(Int32)-match.begin.as(Int32)) > r.size
-            r = match.begin.as(Int32)...match.end.as(Int32)
+            r = (tr[0]+match.begin.as(Int32)*3)...(tr[0]+match.end.as(Int32)*3)
             s = match[0]
           end
         end

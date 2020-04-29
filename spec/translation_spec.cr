@@ -39,7 +39,7 @@ module Bio
     it "finds longest translation" do
       seq = Bio::DNASeq.new("atggcttgttggcctcagctgaggttgctgctgtggaagaacTGA")
       tr = Bio::Translation.new(seq)
-      tr.longest_open_reading_frame.should eq({0, "Reverse", "SVLPQQQPQLRPTSH", 0...15})
+      tr.longest_open_reading_frame.should eq({0, "Reverse", "SVLPQQQPQLRPTSH", 0...45})
     end
     
     it "finds and set open reading frame" do
@@ -71,7 +71,33 @@ module Bio
       tr = Bio::Translation.new(seq)
       tr.longest_open_reading_frame!
       tr.aa_seq.should eq "SVLPQQQPQLRPTSH"
-      tr.range.should eq 0...15
+      tr.range.should eq 0...45
+    end
+
+    it "open reading frame with frameshift and set range" do
+      seq = Bio::DNASeq.new("atggcttgttggcctcagctgaggttgctgctgtggaagaacTGA")
+      tr = Bio::Translation.new(seq)
+      tr.longest_open_reading_frame!(frameshifts: [4])
+      tr.aa_seq.should eq "FFHSSNLS"
+      tr.range.should eq 4...28
+    end
+
+    it "find coding nucleotides" do
+      seq = Bio::DNASeq.new("atggcttgttggcctcagctgaggttgctgctgtggaagaacTGA")
+      tr = Bio::Translation.new(seq)
+      tr.longest_open_reading_frame!(frameshifts: [4])
+      tr.aa_seq.should eq "FFHSSNLS"
+      tr.range.should eq 4...28
+      tr.coding_nucleotides_of(2...5).should eq "cacagcagc"
+    end
+
+    it "find coding nucleotides" do
+      seq = Bio::DNASeq.new("atggcttgttggcctcagctgaggttgctgctgtggaagaacTGA")
+      tr = Bio::Translation.new(seq)
+      tr.longest_open_reading_frame!(frameshifts: [4])
+      tr.aa_seq.should eq "FFHSSNLS"
+      tr.range.should eq 4...28
+      tr.coding_nucleotides.should eq "ttcttccacagcagcaacctcagc"
     end
   end
 end
