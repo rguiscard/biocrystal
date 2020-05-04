@@ -34,3 +34,30 @@ It is common to design primer. In order to see the result of PCR extension, use 
     seq = Bio::DNASeq.new(sequence: "ATGC AAAAACGGGCGATTTATCC GGGTACTTTCGATCCCATTACCAATGGTCATAT")
     forward = Bio::DNASeq.new(sequence: "CATG CCATGG AAAAACGGGCGATTTATCC")
     puts seq.overlap_extend(forward).sequence #=> "CATG CCATGG AAAAACGGGCGATTTATCC GGGTACTTTCGATCCCATTACCAATGGTCATAT"
+
+### Translate a DNA sequence
+
+Translate a Bio::DNASeq to get an instance of Bio::Translation, which will contains both the original DNA sequence but also the translated amino acids.
+
+    seq = Bio::DNASeq.new("atggcttgttggcctcagctgaggttgctgctgtggaagaacTGA")
+    tr = seq.translate
+    puts tr.nucleotide_seq #=> "atggcttgttggcctcagctgaggttgctgctgtggaagaacTGA"
+    puts tr.amino_acid_seq #=> "MACWPQLRLLLWKN*"
+
+Frameshift and direction of translation can be specified like this:
+
+    seq = Bio::DNASeq.new("atggcttgttggcctcagctgaggttgctgctgtggaagaacTGA")
+    tr = seq.translate(frameshift: 3, direction: Bio::TranslationDirection::Reverse)
+    puts tr.nucleotide_seq #=> "atggcttgttggcctcagctgaggttgctgctgtggaagaacTGA"
+    puts tr.amino_acid_seq #=> "VLPQQQPQLRPTSH"
+
+### Find open reading frame
+
+Automatically find the longest open reading frame from DNA sequence.
+
+    seq = Bio::DNASeq.new("atggcttgttggcctcagctgaggttgctgctgtggaagaacTGA")
+    tr = Bio::Translation.new(seq)
+    tr.longest_open_reading_frame!
+    puts tr.aa_seq #=> "SVLPQQQPQLRPTSH"
+    puts tr.range #=> 0...45
+    puts tr.direction #=> Bio::TranslationDirection::Reverse

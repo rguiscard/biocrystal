@@ -72,6 +72,7 @@ module Bio
       tr.longest_open_reading_frame!
       tr.aa_seq.should eq "SVLPQQQPQLRPTSH"
       tr.range.should eq 0...45
+      tr.direction.should eq Bio::TranslationDirection::Reverse
     end
 
     it "open reading frame with frameshift and set range" do
