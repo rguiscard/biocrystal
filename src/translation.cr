@@ -107,20 +107,24 @@ module Bio
     # frameshift means the beginning of translation. It can be any number as long as it is less than size of DNA sequence
     # if reverse is true, it will reverse first, then do frameshift
     def translate(frameshift = 0, direction = Bio::TranslationDirection::Forward)
-      case direction
-      when .reverse?
-        s = Bio::StandardCodon.translate(@seq.reverse_complement.sequence[frameshift..-1])
-      else
-        s = Bio::StandardCodon.translate(@seq.sequence[frameshift..-1])
-      end
-      s
+      translate(frameshift..-1, direction)
+    end
+
+    def translate(range : Range = 0..-1, direction = Bio::TranslationDirection::Forward)
+      s = direction.reverse? ? @seq.reverse_complement : @seq
+      Bio::StandardCodon.translate(s.sequence[range])
     end
 
     def translate!(frameshift = 0, direction = Bio::TranslationDirection::Forward)
-      @amino_acid_seq = translate(frameshift, direction)
+      translate!(frameshift..-1, direction)
+      self
+    end
+
+    def translate!(range : Range = 0..-1, direction = Bio::TranslationDirection::Forward)
+      @amino_acid_seq = translate(range, direction)
       @frameshift = frameshift
       @direction = direction
-      @range = frameshift...(frameshift+@amino_acid_seq.size*3)
+      @range = (range.end == -1) ? range.begin...(@amino_acid_seq.size*3+range.begin) : range
       self
     end
 
